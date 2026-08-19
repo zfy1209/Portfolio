@@ -137,7 +137,6 @@ function renderProfile() {
 
   nodes.heroLinks.innerHTML = "";
   contactItems()
-    .slice(0, 3)
     .forEach((contact) => {
       const item = document.createElement("span");
       item.className = "contact-chip";
@@ -177,6 +176,7 @@ function contactItems() {
   return [
     profile.email ? { label: "Email", value: profile.email } : null,
     profile.wechat ? { label: "WeChat", value: profile.wechat } : null,
+    profile.phone ? { label: "Phone", value: profile.phone } : null,
   ].filter(Boolean);
 }
 
