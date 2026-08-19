@@ -9,6 +9,7 @@ window.PORTFOLIO_DATA = {
       "哈尔滨工业大学控制科学与工程硕士在读。本科毕业于四川大学自动化专业，保研至哈尔滨工业大学。具备 C/C++、Python、Matlab 与 Linux 开发经验，熟悉 ROS、Pinocchio、MuJoCo、Gazebo、Isaac Lab、IK、轨迹规划与零空间理论；使用过 Franka/FR3 与 Kinova 双臂系统，具备真实机械臂调试和数据采集经验。",
     email: "zengfeiyang1209@163.com",
     wechat: "zfyzfyzfy2002",
+    phone: "18161316315",
     location: "China",
     skills: [
       "Diffusion Policy",
