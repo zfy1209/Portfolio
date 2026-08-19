@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>个人作品集管理页</title>
+    <meta
+      name="description"
+      content="用于简历投递阶段整理图片、视频和项目说明的个人作品集网页。"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <span class="brand-mark">P</span>
+        <span>
+          <strong id="displayName">Your Name</strong>
+          <small>Portfolio Studio</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#upload">上传</a>
+        <a href="#works">作品</a>
+        <a href="#profile">资料</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="kicker">Portfolio Studio</p>
+          <h1>整理你的图片、视频和项目案例</h1>
+          <p class="hero-lede">
+            一个面向简历投递阶段的本地作品集页面，用来收纳视觉素材、项目说明、职责贡献和相关链接。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#upload">上传作品</a>
+            <button class="button subtle" type="button" id="previewModeButton">预览展示页</button>
+          </div>
+        </div>
+
+        <aside class="stats-panel" aria-label="作品集概览">
+          <div class="stat">
+            <span id="totalWorks">0</span>
+            <small>作品</small>
+          </div>
+          <div class="stat">
+            <span id="imageCount">0</span>
+            <small>图片</small>
+          </div>
+          <div class="stat">
+            <span id="videoCount">0</span>
+            <small>视频</small>
+          </div>
+          <div class="stat wide">
+            <span id="storageEstimate">本地保存</span>
+            <small>浏览器 IndexedDB</small>
+          </div>
+        </aside>
+      </section>
+
+      <section class="studio-grid" id="upload">
+        <form class="editor-panel" id="workForm">
+          <div class="section-heading compact">
+            <div>
+              <p class="kicker">Upload</p>
+              <h2>添加作品</h2>
+            </div>
+            <button class="icon-button" type="reset" aria-label="清空表单" title="清空表单">×</button>
+          </div>
+
+          <label class="drop-zone" for="mediaInput" id="dropZone">
+            <input id="mediaInput" name="media" type="file" accept="image/*,video/*" multiple />
+            <span class="drop-icon" aria-hidden="true">+</span>
+            <strong>选择或拖入图片/视频</strong>
+            <small>支持多文件上传，可在作品列表中继续编辑说明。</small>
+          </label>
+
+          <div class="field-grid">
+            <label>
+              <span>作品标题</span>
+              <input id="titleInput" name="title" type="text" placeholder="例如：校园服务小程序 UI / 机械臂演示视频" />
+            </label>
+            <label>
+              <span>分类</span>
+              <select id="categoryInput" name="category">
+                <option value="产品设计">产品设计</option>
+                <option value="前端开发">前端开发</option>
+                <option value="后端开发">后端开发</option>
+                <option value="机器人/算法">机器人/算法</option>
+                <option value="视觉影像">视觉影像</option>
+                <option value="其他">其他</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            <span>简介</span>
+            <textarea
+              id="summaryInput"
+              name="summary"
+              rows="4"
+              placeholder="写清楚项目背景、你负责的部分、最终结果。"
+            ></textarea>
+          </label>
+
+          <div class="field-grid">
+            <label>
+              <span>角色</span>
+              <input id="roleInput" name="role" type="text" placeholder="例如：前端开发 / 视觉设计 / 算法实现" />
+            </label>
+            <label>
+              <span>链接</span>
+              <input id="linkInput" name="link" type="url" placeholder="https://github.com/..." />
+            </label>
+          </div>
+
+          <label>
+            <span>技术栈 / 关键词</span>
+            <input id="tagsInput" name="tags" type="text" placeholder="React, Python, CAD, Figma，用逗号分隔" />
+          </label>
+
+          <div class="pending-list" id="pendingList" aria-live="polite"></div>
+
+          <div class="form-actions">
+            <button class="button primary" type="submit">保存作品</button>
+            <button class="button subtle" type="button" id="exportButton">导出备份</button>
+            <label class="button subtle import-button">
+              导入备份
+              <input id="importInput" type="file" accept="application/json" />
+            </label>
+          </div>
+        </form>
+
+        <aside class="profile-panel" id="profile">
+          <div class="section-heading compact">
+            <div>
+              <p class="kicker">Profile</p>
+              <h2>个人资料</h2>
+            </div>
+            <button class="button small" type="button" id="saveProfileButton">保存</button>
+          </div>
+          <label>
+            <span>姓名</span>
+            <input id="nameInput" type="text" placeholder="你的姓名" />
+          </label>
+          <label>
+            <span>求职方向</span>
+            <input id="headlineInput" type="text" placeholder="例如：前端开发工程师 / 机器人算法工程师" />
+          </label>
+          <label>
+            <span>个人简介</span>
+            <textarea id="bioInput" rows="5" placeholder="用三到五句话概括你的方向、优势和代表经历。"></textarea>
+          </label>
+          <label>
+            <span>邮箱</span>
+            <input id="emailInput" type="email" placeholder="name@example.com" />
+          </label>
+          <label>
+            <span>更多链接</span>
+            <input id="linksInput" type="text" placeholder="GitHub / B站 / 个人主页链接，用逗号分隔" />
+          </label>
+        </aside>
+      </section>
+
+      <section class="works-section" id="works">
+        <div class="section-heading">
+          <div>
+            <p class="kicker">Works</p>
+            <h2>作品列表</h2>
+          </div>
+          <div class="toolbar" aria-label="作品工具栏">
+            <input id="searchInput" type="search" placeholder="搜索标题、分类、关键词" />
+            <select id="filterInput" aria-label="按分类筛选">
+              <option value="all">全部分类</option>
+            </select>
+            <button class="button danger" type="button" id="clearButton">清空作品</button>
+          </div>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <strong>还没有作品</strong>
+          <p>上传图片或视频后，这里会生成可编辑的作品卡片。</p>
+        </div>
+
+        <div class="work-grid" id="workGrid"></div>
+      </section>
+    </main>
+
+    <dialog class="media-dialog" id="mediaDialog" aria-label="作品预览">
+      <button class="dialog-close" type="button" id="dialogClose" aria-label="关闭预览">×</button>
+      <div id="dialogMedia"></div>
+      <div class="dialog-copy">
+        <span id="dialogCategory"></span>
+        <h3 id="dialogTitle"></h3>
+        <p id="dialogSummary"></p>
+        <div id="dialogTags" class="tag-row"></div>
+      </div>
+    </dialog>
+
+    <dialog class="preview-dialog" id="previewDialog" aria-label="展示页预览">
+      <button class="dialog-close" type="button" id="previewClose" aria-label="关闭展示页预览">×</button>
+      <article class="public-preview" id="publicPreview"></article>
+    </dialog>
+
+    <template id="workCardTemplate">
+      <article class="work-card">
+        <button class="media-button" type="button"></button>
+        <div class="work-body">
+          <div class="card-line">
+            <span class="category-pill"></span>
+            <span class="date-text"></span>
+          </div>
+          <h3></h3>
+          <p></p>
+          <div class="tag-row"></div>
+          <div class="card-actions">
+            <button type="button" data-action="edit">编辑</button>
+            <button type="button" data-action="download">下载素材</button>
+            <a target="_blank" rel="noreferrer">打开链接</a>
+            <button type="button" data-action="delete">删除</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <footer class="app-footer">
+      <span>Portfolio Studio</span>
+      <a href="#top">返回顶部</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

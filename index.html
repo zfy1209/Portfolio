@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio | 个人作品集</title>
+    <meta name="description" content="个人作品集：项目案例、图片、视频与联系方式。" />
+    <link rel="stylesheet" href="public.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <span class="brand-mark" data-initials>PF</span>
+        <span>
+          <strong data-profile="name">Your Name</strong>
+          <small data-profile="headline">Portfolio</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#works">作品</a>
+        <a href="#about">关于</a>
+        <a href="#contact">联系</a>
+        <a href="studio.html">本地管理</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="kicker" data-profile="headline">Portfolio</p>
+          <h1 data-profile="name">Your Name</h1>
+          <p class="hero-lede" data-profile="bio">
+            展示代表项目、图片、视频和关键成果的个人作品集。
+          </p>
+          <div class="hero-actions" id="heroLinks"></div>
+        </div>
+        <aside class="hero-media" aria-label="代表作品预览">
+          <div class="media-frame" id="featuredMedia">
+            <div class="placeholder-visual">
+              <span>Portfolio</span>
+            </div>
+          </div>
+          <div class="featured-caption">
+            <span id="featuredCategory">Featured</span>
+            <strong id="featuredTitle">作品素材待添加</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="works">
+        <div class="section-heading">
+          <div>
+            <p class="kicker">Selected Works</p>
+            <h2>作品案例</h2>
+          </div>
+          <div class="filters" id="filters" aria-label="作品分类"></div>
+        </div>
+        <div class="work-grid" id="workGrid"></div>
+        <div class="empty-state" id="emptyState">
+          <strong>作品正在整理中</strong>
+          <p>代表项目、图片和视频会显示在这里。</p>
+        </div>
+      </section>
+
+      <section class="about-section" id="about">
+        <div>
+          <p class="kicker">About</p>
+          <h2>关于我</h2>
+        </div>
+        <div class="about-copy">
+          <p data-profile="about">
+            这里可以放求职方向、核心技能、项目经验和你希望招聘方快速记住的信息。
+          </p>
+          <div class="skill-list" id="skillList"></div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact">
+        <div>
+          <p class="kicker">Contact</p>
+          <h2>联系我</h2>
+        </div>
+        <div class="contact-links" id="contactLinks"></div>
+      </section>
+    </main>
+
+    <dialog class="media-dialog" id="mediaDialog" aria-label="作品预览">
+      <button class="dialog-close" type="button" id="dialogClose" aria-label="关闭预览">×</button>
+      <div id="dialogMedia"></div>
+      <div class="dialog-copy">
+        <span id="dialogCategory"></span>
+        <h3 id="dialogTitle"></h3>
+        <p id="dialogSummary"></p>
+        <div class="tag-row" id="dialogTags"></div>
+      </div>
+    </dialog>
+
+    <template id="workTemplate">
+      <article class="work-card">
+        <button class="work-media" type="button" aria-label="预览作品"></button>
+        <div class="work-copy">
+          <div class="card-line">
+            <span class="category"></span>
+            <span class="year"></span>
+          </div>
+          <h3></h3>
+          <p></p>
+          <div class="tag-row"></div>
+          <div class="card-actions">
+            <a target="_blank" rel="noreferrer">查看链接</a>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <footer class="site-footer">
+      <span data-footer-name>Portfolio</span>
+      <a href="#top">返回顶部</a>
+    </footer>
+
+    <script src="data/portfolio-data.js"></script>
+    <script src="public.js"></script>
+  </body>
+</html>
