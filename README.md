@@ -86,6 +86,23 @@ https://yourname.github.io/portfolio/
 }
 ```
 
+## 修改联系方式
+
+公开页不会把邮箱和微信渲染成链接按钮，而是直接展示具体文本。编辑 `data/portfolio-data.js` 中的 `contacts`：
+
+```js
+contacts: [
+  {
+    label: "Email",
+    value: "zengfeiyang1209@163.com"
+  },
+  {
+    label: "WeChat",
+    value: "zfyzfyzfy2002"
+  }
+]
+```
+
 ## 添加图片或视频
 
 1. 把素材文件放入 `assets/works/`。
@@ -97,6 +114,32 @@ src: "assets/works/demo.mp4"
 ```
 
 视频建议使用 `.mp4`，图片建议使用 `.jpg`、`.png` 或 `.webp`。
+
+## GitHub Pages 与 LFS 视频
+
+如果视频使用 Git LFS，GitHub Pages 下的相对路径可能只返回 LFS 指针文件，导致网页里 `<video>` 无法播放。
+
+当前 `data/portfolio-data.js` 已配置：
+
+```js
+videoBaseUrl: "https://media.githubusercontent.com/media/zfy1209/Portfolio/main/"
+```
+
+公开页会把视频路径：
+
+```js
+assets/works/demo.mp4
+```
+
+自动转换为：
+
+```text
+https://media.githubusercontent.com/media/zfy1209/Portfolio/main/assets/works/demo.mp4
+```
+
+这样可以绕开 GitHub Pages 读取 LFS 指针的问题。图片仍然使用普通相对路径。
+
+如果仓库名、用户名或分支名变化，需要同步修改 `videoBaseUrl`。
 
 ## 当前三个项目
 

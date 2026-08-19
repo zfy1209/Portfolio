@@ -194,7 +194,7 @@ h3 {
 .button,
 .filters button,
 .card-actions a,
-.contact-links a {
+.contact-card {
   display: inline-flex;
   min-height: 42px;
   align-items: center;
@@ -216,9 +216,36 @@ h3 {
 
 .button.subtle:hover,
 .filters button:hover,
-.card-actions a:hover,
-.contact-links a:hover {
+.card-actions a:hover {
   border-color: var(--blue);
+}
+
+.contact-chip,
+.contact-card {
+  display: grid;
+  justify-content: start;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: default;
+}
+
+.contact-chip {
+  min-height: 58px;
+  min-width: min(250px, 100%);
+  padding: 10px 14px;
+}
+
+.contact-chip small,
+.contact-card small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.contact-chip strong,
+.contact-card strong {
+  overflow-wrap: anywhere;
 }
 
 .hero-media {
@@ -361,11 +388,22 @@ h3 {
 
 .project-media-item img,
 .project-media-item video,
-.project-media-item .placeholder-visual {
+.project-media-item .placeholder-visual,
+.project-media-item .video-fallback {
   width: 100%;
   aspect-ratio: 16 / 10;
   min-height: 0;
   object-fit: contain;
+}
+
+.video-fallback {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(36, 95, 168, 0.18), rgba(38, 113, 91, 0.2)),
+    #111518;
+  color: #fff;
+  font-weight: 850;
 }
 
 .project-media-item span {
@@ -462,9 +500,10 @@ h3 {
   align-items: stretch;
 }
 
-.contact-links a {
+.contact-card {
   min-width: 160px;
   min-height: 58px;
+  padding: 10px 14px;
   font-weight: 800;
 }
 
@@ -485,11 +524,17 @@ h3 {
 
 #dialogMedia img,
 #dialogMedia video,
-#dialogMedia .placeholder-visual {
+#dialogMedia .placeholder-visual,
+#dialogMedia .video-fallback {
   width: 100%;
   max-height: 70vh;
   object-fit: contain;
   background: #111518;
+}
+
+#dialogMedia .video-fallback {
+  min-height: 56vh;
+  aspect-ratio: auto;
 }
 
 .dialog-copy {
@@ -589,7 +634,7 @@ h3 {
 
   .filters button,
   .hero-actions .button,
-  .contact-links a {
+  .contact-card {
     flex: 1 1 150px;
   }
 

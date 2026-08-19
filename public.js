@@ -1,6 +1,7 @@
 const data = window.PORTFOLIO_DATA || {};
 const profile = data.profile || {};
 const projects = Array.isArray(data.projects) ? data.projects : Array.isArray(data.works) ? data.works : [];
+const videoBaseUrl = data.videoBaseUrl || "";
 
 const nodes = {
   initials: document.querySelector("[data-initials]"),
@@ -55,13 +56,13 @@ function createMedia(media, controls = false) {
 
   if (media.type === "video") {
     const video = document.createElement("video");
-    video.src = media.src;
+    video.src = mediaUrl(media);
     video.poster = media.poster || "";
     video.controls = controls;
     video.muted = !controls;
     video.playsInline = true;
-    video.preload = controls ? "metadata" : "metadata";
-    video.addEventListener("error", () => video.replaceWith(createPlaceholder("Video")));
+    video.preload = controls ? "metadata" : "none";
+    video.addEventListener("error", () => video.replaceWith(createVideoFallback(media)));
     return video;
   }
 
@@ -71,6 +72,25 @@ function createMedia(media, controls = false) {
   image.loading = "lazy";
   image.addEventListener("error", () => image.replaceWith(createPlaceholder("Image")));
   return image;
+}
+
+function mediaUrl(media) {
+  if (!media?.src) return "";
+  if (/^https?:\/\//i.test(media.src)) return media.src;
+  if (media.type === "video" && videoBaseUrl) {
+    return `${videoBaseUrl}${encodeURI(media.src)}`;
+  }
+  return media.src;
+}
+
+function createVideoFallback(media) {
+  const fallback = document.createElement("a");
+  fallback.className = "video-fallback";
+  fallback.href = mediaUrl(media);
+  fallback.target = "_blank";
+  fallback.rel = "noreferrer";
+  fallback.textContent = "打开视频文件";
+  return fallback;
 }
 
 function renderTags(container, tags = []) {
@@ -93,18 +113,18 @@ function renderProfile() {
   });
 
   nodes.heroLinks.innerHTML = "";
-  (profile.links || []).slice(0, 3).forEach((link, index) => {
-    if (!link.href || !link.label) return;
-    const anchor = document.createElement("a");
-    anchor.className = index === 0 ? "button primary" : "button subtle";
-    anchor.href = link.href;
-    anchor.textContent = link.label;
-    if (!link.href.startsWith("mailto:") && !link.href.startsWith("#")) {
-      anchor.target = "_blank";
-      anchor.rel = "noreferrer";
-    }
-    nodes.heroLinks.append(anchor);
-  });
+  contactItems()
+    .slice(0, 3)
+    .forEach((contact) => {
+      const item = document.createElement("span");
+      item.className = "contact-chip";
+      const label = document.createElement("small");
+      const value = document.createElement("strong");
+      label.textContent = contact.label;
+      value.textContent = contact.value;
+      item.append(label, value);
+      nodes.heroLinks.append(item);
+    });
 
   nodes.skillList.innerHTML = "";
   (profile.skills || []).forEach((skill) => {
@@ -114,21 +134,27 @@ function renderProfile() {
   });
 
   nodes.contactLinks.innerHTML = "";
-  const contactItems = [...(profile.links || [])];
-  if (profile.email && !contactItems.some((item) => item.href === `mailto:${profile.email}`)) {
-    contactItems.unshift({ label: "Email", href: `mailto:${profile.email}` });
-  }
-  contactItems.forEach((link) => {
-    if (!link.href || !link.label) return;
-    const anchor = document.createElement("a");
-    anchor.href = link.href;
-    anchor.textContent = link.label;
-    if (!link.href.startsWith("mailto:") && !link.href.startsWith("#")) {
-      anchor.target = "_blank";
-      anchor.rel = "noreferrer";
-    }
-    nodes.contactLinks.append(anchor);
+  contactItems().forEach((contact) => {
+    const item = document.createElement("span");
+    item.className = "contact-card";
+    const label = document.createElement("small");
+    const value = document.createElement("strong");
+    label.textContent = contact.label;
+    value.textContent = contact.value;
+    item.append(label, value);
+    nodes.contactLinks.append(item);
   });
+}
+
+function contactItems() {
+  if (Array.isArray(profile.contacts) && profile.contacts.length) {
+    return profile.contacts.filter((item) => item.label && item.value);
+  }
+
+  return [
+    profile.email ? { label: "Email", value: profile.email } : null,
+    profile.wechat ? { label: "WeChat", value: profile.wechat } : null,
+  ].filter(Boolean);
 }
 
 function renderFeatured() {

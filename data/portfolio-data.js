@@ -1,4 +1,5 @@
 window.PORTFOLIO_DATA = {
+  videoBaseUrl: "https://media.githubusercontent.com/media/zfy1209/Portfolio/main/",
   profile: {
     name: "曾飞扬",
     headline: "具身智能算法 / 机器人学习 / 机械臂运动规划与控制",
@@ -7,6 +8,7 @@ window.PORTFOLIO_DATA = {
     about:
       "哈尔滨工业大学控制科学与工程硕士在读。本科毕业于四川大学自动化专业，保研至哈尔滨工业大学。具备 C/C++、Python、Matlab 与 Linux 开发经验，熟悉 ROS、Pinocchio、MuJoCo、Gazebo、Isaac Lab、IK、轨迹规划与零空间理论；使用过 Franka/FR3 与 Kinova 双臂系统，具备真实机械臂调试和数据采集经验。",
     email: "zengfeiyang1209@163.com",
+    wechat: "zfyzfyzfy2002",
     location: "China",
     skills: [
       "Diffusion Policy",
@@ -20,14 +22,14 @@ window.PORTFOLIO_DATA = {
       "MuJoCo",
       "Isaac Lab",
     ],
-    links: [
+    contacts: [
       {
         label: "Email",
-        href: "mailto:zengfeiyang1209@163.com",
+        value: "zengfeiyang1209@163.com",
       },
       {
-        label: "WeChat: zfyzfyzfy2002",
-        href: "#contact",
+        label: "WeChat",
+        value: "zfyzfyzfy2002",
       },
     ],
   },
