@@ -4,7 +4,7 @@ window.PORTFOLIO_DATA = {
     name: "曾飞扬",
     headline: "具身智能算法 / 机器人学习 / 机械臂运动规划与控制",
     bio:
-      "聚焦双臂协同操控、机器人模仿学习、反应式规划与安全避障，熟悉机械臂运动学、末端轨迹规划、Diffusion Policy、ACT、Flow Matching 与实机部署。",
+      "聚焦双臂协同操控、机器人模仿学习、反应式规划与安全避障，熟悉机械臂运动学、末端轨迹规划、Diffusion Policy、ACT、Flow Matching 与真实机器人部署。",
     about:
       "哈尔滨工业大学控制科学与工程硕士在读。本科毕业于四川大学自动化专业，保研至哈尔滨工业大学。具备 C/C++、Python、Matlab 与 Linux 开发经验，熟悉 ROS、Pinocchio、MuJoCo、Gazebo、Isaac Lab、IK、轨迹规划与零空间理论；使用过 Franka/FR3 与 Kinova 双臂系统，具备真实机械臂调试和数据采集经验。",
     email: "zengfeiyang1209@163.com",
@@ -45,13 +45,13 @@ window.PORTFOLIO_DATA = {
       title: "基于 Diffusion Policy 的机械臂视觉模仿学习与实时推理优化",
       category: "机器人模仿学习",
       year: "2026.04-2026.08",
-      featured: true,
+      result: "RTC 使动作 chunk 边界跳变 p95 降低 72.3%，HAPC 降低 52.3%。",
       summary:
         "基于 FR3 单臂与 FR3+Kinova 双臂平台，构建视觉模仿学习与真机推理流程，完成抓取、搬运、放置等任务验证，并针对推理边界突变与动作回退问题进行实时推理优化。",
       highlights: [
         "负责多模态数据预处理，包括多源时间戳同步、ROI 裁剪、状态/动作归一化，提升训练数据一致性。",
         "设计 RTC 异步推理与基于历史动作先验的 HAPC 推理策略，缓解推理重规划导致的动作不连续。",
-        "加入轨迹后处理机制，对新生成动作施加位置、速度、加速度约束，降低实机执行抖动与风险。",
+        "加入轨迹后处理机制，对新生成动作施加位置、速度、加速度约束，降低真机执行抖动与风险。",
         "RTC 使动作 chunk 边界跳变 p95 降低 72.3%，边界速度跳变 p95 降低 65.2%；HAPC 使边界跳变 p95 降低 52.3%，边界速度跳变 p95 降低 56.3%。",
       ],
       tags: ["Diffusion Policy", "RTC", "HAPC", "FR3", "Kinova", "Real Robot"],
@@ -60,30 +60,35 @@ window.PORTFOLIO_DATA = {
           title: "单臂同步推理",
           type: "video",
           src: "assets/works_web/单臂同步推理.web.mp4",
+          poster: "assets/posters/单臂同步推理.web.jpg",
           description: "FR3 单臂平台上的同步推理效果演示。",
         },
         {
           title: "单臂 RTC 推理",
           type: "video",
           src: "assets/works_web/单臂RTC推理.web.mp4",
+          poster: "assets/posters/单臂RTC推理.web.jpg",
           description: "通过 RTC 异步推理降低动作 chunk 边界突变。",
         },
         {
           title: "单臂 HAPC 推理",
           type: "video",
           src: "assets/works_web/单臂HAPC推理.web.mp4",
+          poster: "assets/posters/单臂HAPC推理.web.jpg",
           description: "利用历史动作先验改善重规划阶段的动作连续性。",
         },
         {
           title: "双臂同步推理",
           type: "video",
           src: "assets/works_web/双臂同步推理.web.mp4",
+          poster: "assets/posters/双臂同步推理.web.jpg",
           description: "FR3+Kinova 双臂平台上的同步推理效果演示。",
         },
         {
           title: "双臂 RTC 推理",
           type: "video",
           src: "assets/works_web/双臂RTC推理.web.mp4",
+          poster: "assets/posters/双臂RTC推理.web.jpg",
           description: "双臂任务中的 RTC 推理与动作连续性优化。",
         },
       ],
@@ -93,6 +98,7 @@ window.PORTFOLIO_DATA = {
       title: "双臂协同搬运反应式规划与任务优先级控制系统",
       category: "运动规划与控制",
       year: "2025.11-2026.03",
+      result: "复杂场景平均最小安全距离由约 2.0 cm 提升至约 6.1 cm。",
       summary:
         "面向双 Franka 受限空间协同搬运任务，在仿真环境中构建高层反应式规划与底层任务优先级控制闭环，实现高层 100 Hz 规划与低层 1 kHz 控制。",
       highlights: [
@@ -104,16 +110,22 @@ window.PORTFOLIO_DATA = {
       tags: ["Dual-Arm", "Reactive Planning", "Task Priority", "SDF", "Null Space", "ICUS 2026"],
       media: [
         {
-          title: "",
+          title: "未引入 SDF 全身避障任务",
+          variant: "without",
           type: "video",
           src: "assets/works_web/项目二-无sdf.mp4",
-          description: "",
+          poster: "assets/posters/项目二-无sdf.jpg",
+          description:
+            "对照实验：未引入 SDF 全身距离感知与梯度避障任务，仅依靠原有反应式规划与任务优先级控制执行双臂协同搬运，用于观察受限空间中的局部碰撞风险和安全裕度不足问题。",
         },
         {
-          title: "",
+          title: "引入 SDF 全身距离感知与梯度避障任务",
+          variant: "with",
           type: "video",
           src: "assets/works_web/项目二-有sdf.mp4",
-          description: "",
+          poster: "assets/posters/项目二-有sdf.jpg",
+          description:
+            "改进实验：在任务优先级控制框架中加入 SDF 全身距离感知与梯度避障任务，通过零空间投影协调协作搬运与全身避障，提高复杂障碍场景下的最小安全距离和执行稳定性。",
         },
       ],
     },
@@ -122,6 +134,8 @@ window.PORTFOLIO_DATA = {
       title: "双臂机器人 VR 遥操作与具身智能数据采集系统",
       category: "数据采集系统",
       year: "2026.04-2026.06",
+      featured: true,
+      result: "完成 FR3+Kinova 双臂 VR 遥操作、多源同步与 LeRobot 数据集保存链路。",
       summary:
         "面向模仿学习数据采集，设计 FR3+Kinova 双臂 VR 遥操作系统，形成从人类示教、多源同步到 LeRobot 数据集保存的采集链路。",
       highlights: [
@@ -136,6 +150,7 @@ window.PORTFOLIO_DATA = {
           title: "双臂 VR 数据采集系统",
           type: "video",
           src: "assets/works_web/双臂VR数据采集系统.web.mp4",
+          poster: "assets/posters/双臂VR数据采集系统.web.jpg",
           description: "FR3+Kinova 双臂 VR 遥操作与数据采集链路演示。",
         },
       ],
