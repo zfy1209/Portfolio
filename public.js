@@ -55,6 +55,10 @@ function createMedia(media, controls = false) {
   }
 
   if (media.type === "video") {
+    if (!controls) {
+      return createVideoPreview(media);
+    }
+
     const video = document.createElement("video");
     video.src = mediaUrl(media);
     video.poster = media.poster || "";
@@ -83,13 +87,32 @@ function mediaUrl(media) {
   return media.src;
 }
 
+function createVideoPreview(media) {
+  const preview = document.createElement("div");
+  preview.className = "video-preview";
+
+  if (media.poster) {
+    const image = document.createElement("img");
+    image.src = media.poster;
+    image.alt = media.title || "视频封面";
+    image.loading = "lazy";
+    image.addEventListener("error", () => image.remove());
+    preview.append(image);
+  }
+
+  const label = document.createElement("strong");
+  label.textContent = "播放视频";
+  preview.append(label);
+  return preview;
+}
+
 function createVideoFallback(media) {
   const fallback = document.createElement("a");
   fallback.className = "video-fallback";
   fallback.href = mediaUrl(media);
   fallback.target = "_blank";
   fallback.rel = "noreferrer";
-  fallback.textContent = "打开视频文件";
+  fallback.textContent = "新窗口打开视频";
   return fallback;
 }
 

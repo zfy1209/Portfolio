@@ -193,8 +193,7 @@ h3 {
 
 .button,
 .filters button,
-.card-actions a,
-.contact-card {
+.card-actions a {
   display: inline-flex;
   min-height: 42px;
   align-items: center;
@@ -224,7 +223,7 @@ h3 {
 .contact-card {
   display: grid;
   justify-content: start;
-  gap: 2px;
+  gap: 5px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -262,7 +261,8 @@ h3 {
 }
 
 .media-frame img,
-.media-frame video {
+.media-frame video,
+.media-frame .video-preview {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -389,6 +389,7 @@ h3 {
 .project-media-item img,
 .project-media-item video,
 .project-media-item .placeholder-visual,
+.project-media-item .video-preview,
 .project-media-item .video-fallback {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -404,6 +405,36 @@ h3 {
     #111518;
   color: #fff;
   font-weight: 850;
+}
+
+.video-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(36, 95, 168, 0.28), transparent 32%),
+    linear-gradient(135deg, rgba(36, 95, 168, 0.2), rgba(38, 113, 91, 0.16)),
+    #111518;
+  color: #fff;
+}
+
+.video-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+}
+
+.video-preview strong {
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: rgba(17, 21, 24, 0.72);
 }
 
 .project-media-item span {
@@ -501,10 +532,9 @@ h3 {
 }
 
 .contact-card {
-  min-width: 160px;
+  min-width: min(320px, 100%);
   min-height: 58px;
-  padding: 10px 14px;
-  font-weight: 800;
+  padding: 14px 16px;
 }
 
 .media-dialog {
@@ -525,6 +555,7 @@ h3 {
 #dialogMedia img,
 #dialogMedia video,
 #dialogMedia .placeholder-visual,
+#dialogMedia .video-preview,
 #dialogMedia .video-fallback {
   width: 100%;
   max-height: 70vh;
