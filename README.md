@@ -115,31 +115,25 @@ src: "assets/works/demo.mp4"
 
 视频建议使用 `.mp4`，图片建议使用 `.jpg`、`.png` 或 `.webp`。
 
-## GitHub Pages 与 LFS 视频
+## GitHub Pages 与视频播放
 
 如果视频使用 Git LFS，GitHub Pages 下的相对路径可能只返回 LFS 指针文件，导致网页里 `<video>` 无法播放。
 
-当前 `data/portfolio-data.js` 已配置：
-
-```js
-videoBaseUrl: "https://media.githubusercontent.com/media/zfy1209/Portfolio/main/"
-```
-
-公开页会把视频路径：
-
-```js
-assets/works/demo.mp4
-```
-
-自动转换为：
+当前页面已改为使用压缩后的网页播放版本：
 
 ```text
-https://media.githubusercontent.com/media/zfy1209/Portfolio/main/assets/works/demo.mp4
+assets/works_web/*.web.mp4
 ```
 
-这样可以绕开 GitHub Pages 读取 LFS 指针的问题。图片仍然使用普通相对路径。
+这些压缩视频体积较小，可以由 GitHub Pages 直接托管。`data/portfolio-data.js` 中的：
 
-如果仓库名、用户名或分支名变化，需要同步修改 `videoBaseUrl`。
+```js
+videoBaseUrl: ""
+```
+
+表示不再使用 GitHub LFS media 地址。
+
+原始大视频仍可保留在 `assets/works/` 并使用 Git LFS 管理；网页展示优先使用 `assets/works_web/` 中的压缩视频。
 
 ## 当前三个项目
 

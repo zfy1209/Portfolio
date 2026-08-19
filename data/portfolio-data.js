@@ -1,5 +1,5 @@
 window.PORTFOLIO_DATA = {
-  videoBaseUrl: "https://media.githubusercontent.com/media/zfy1209/Portfolio/main/",
+  videoBaseUrl: "",
   profile: {
     name: "曾飞扬",
     headline: "具身智能算法 / 机器人学习 / 机械臂运动规划与控制",
@@ -31,6 +31,10 @@ window.PORTFOLIO_DATA = {
         label: "WeChat",
         value: "zfyzfyzfy2002",
       },
+      {
+        label: "Phone",
+        value: "18161316315",
+      },
     ],
   },
 
@@ -54,31 +58,31 @@ window.PORTFOLIO_DATA = {
         {
           title: "单臂同步推理",
           type: "video",
-          src: "assets/works/单臂同步推理.mp4",
+          src: "assets/works_web/单臂同步推理.web.mp4",
           description: "FR3 单臂平台上的同步推理效果演示。",
         },
         {
           title: "单臂 RTC 推理",
           type: "video",
-          src: "assets/works/单臂RTC推理.mp4",
+          src: "assets/works_web/单臂RTC推理.web.mp4",
           description: "通过 RTC 异步推理降低动作 chunk 边界突变。",
         },
         {
           title: "单臂 HAPC 推理",
           type: "video",
-          src: "assets/works/单臂HAPC推理.mp4",
+          src: "assets/works_web/单臂HAPC推理.web.mp4",
           description: "利用历史动作先验改善重规划阶段的动作连续性。",
         },
         {
           title: "双臂同步推理",
           type: "video",
-          src: "assets/works/双臂同步推理.mp4",
+          src: "assets/works_web/双臂同步推理.web.mp4",
           description: "FR3+Kinova 双臂平台上的同步推理效果演示。",
         },
         {
           title: "双臂 RTC 推理",
           type: "video",
-          src: "assets/works/双臂RTC推理.mp4",
+          src: "assets/works_web/双臂RTC推理.web.mp4",
           description: "双臂任务中的 RTC 推理与动作连续性优化。",
         },
       ],
@@ -117,7 +121,7 @@ window.PORTFOLIO_DATA = {
         {
           title: "双臂 VR 数据采集系统",
           type: "video",
-          src: "assets/works/双臂VR数据采集系统.mp4",
+          src: "assets/works_web/双臂VR数据采集系统.web.mp4",
           description: "FR3+Kinova 双臂 VR 遥操作与数据采集链路演示。",
         },
       ],
