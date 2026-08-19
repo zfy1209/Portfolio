@@ -7,9 +7,12 @@ const nodes = {
   initials: document.querySelector("[data-initials]"),
   profileFields: document.querySelectorAll("[data-profile]"),
   heroLinks: document.querySelector("#heroLinks"),
+  projectCount: document.querySelector("#projectCount"),
+  mediaCount: document.querySelector("#mediaCount"),
   featuredMedia: document.querySelector("#featuredMedia"),
   featuredCategory: document.querySelector("#featuredCategory"),
   featuredTitle: document.querySelector("#featuredTitle"),
+  featuredResult: document.querySelector("#featuredResult"),
   filters: document.querySelector("#filters"),
   projectList: document.querySelector("#projectList"),
   emptyState: document.querySelector("#emptyState"),
@@ -29,53 +32,16 @@ const nodes = {
 let activeCategory = "全部";
 
 function getInitials(name = "") {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const cleanName = name.trim();
+  const parts = cleanName.split(/\s+/).filter(Boolean);
   if (!parts.length) return "PF";
-  if (/[\u4e00-\u9fa5]/.test(name)) return name.trim().slice(-2);
+  if (/[\u4e00-\u9fa5]/.test(cleanName)) return cleanName.slice(-2);
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
 }
 
 function firstMedia(project) {
   return project?.media?.[0];
-}
-
-function createPlaceholder(label = "Portfolio") {
-  const placeholder = document.createElement("div");
-  placeholder.className = "placeholder-visual";
-  const text = document.createElement("span");
-  text.textContent = label;
-  placeholder.append(text);
-  return placeholder;
-}
-
-function createMedia(media, controls = false) {
-  if (!media?.src) {
-    return createPlaceholder(media?.title || "Media");
-  }
-
-  if (media.type === "video") {
-    if (!controls) {
-      return createVideoPreview(media);
-    }
-
-    const video = document.createElement("video");
-    video.src = mediaUrl(media);
-    video.poster = media.poster || "";
-    video.controls = controls;
-    video.muted = !controls;
-    video.playsInline = true;
-    video.preload = controls ? "metadata" : "none";
-    video.addEventListener("error", () => video.replaceWith(createVideoFallback(media)));
-    return video;
-  }
-
-  const image = document.createElement("img");
-  image.src = media.src;
-  image.alt = media.title || "项目图片";
-  image.loading = "lazy";
-  image.addEventListener("error", () => image.replaceWith(createPlaceholder("Image")));
-  return image;
 }
 
 function mediaUrl(media) {
@@ -85,6 +51,15 @@ function mediaUrl(media) {
     return `${videoBaseUrl}${encodeURI(media.src)}`;
   }
   return media.src;
+}
+
+function createPlaceholder(label = "Portfolio") {
+  const placeholder = document.createElement("div");
+  placeholder.className = "placeholder-visual";
+  const text = document.createElement("span");
+  text.textContent = label;
+  placeholder.append(text);
+  return placeholder;
 }
 
 function createVideoPreview(media) {
@@ -100,9 +75,15 @@ function createVideoPreview(media) {
     preview.append(image);
   }
 
+  const play = document.createElement("span");
+  play.className = "play-badge";
+  play.setAttribute("aria-hidden", "true");
+  play.textContent = "▶";
+
   const label = document.createElement("strong");
   label.textContent = "播放视频";
-  preview.append(label);
+
+  preview.append(play, label);
   return preview;
 }
 
@@ -116,6 +97,34 @@ function createVideoFallback(media) {
   return fallback;
 }
 
+function createMedia(media, controls = false) {
+  if (!media?.src) {
+    return createPlaceholder(media?.title || "Media");
+  }
+
+  if (media.type === "video") {
+    if (!controls) {
+      return createVideoPreview(media);
+    }
+
+    const video = document.createElement("video");
+    video.src = mediaUrl(media);
+    video.poster = media.poster || "";
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    video.addEventListener("error", () => video.replaceWith(createVideoFallback(media)));
+    return video;
+  }
+
+  const image = document.createElement("img");
+  image.src = media.src;
+  image.alt = media.title || "项目图片";
+  image.loading = "lazy";
+  image.addEventListener("error", () => image.replaceWith(createPlaceholder("Image")));
+  return image;
+}
+
 function renderTags(container, tags = []) {
   container.innerHTML = "";
   tags.slice(0, 10).forEach((tag) => {
@@ -125,8 +134,20 @@ function renderTags(container, tags = []) {
   });
 }
 
+function contactItems() {
+  if (Array.isArray(profile.contacts) && profile.contacts.length) {
+    return profile.contacts.filter((item) => item.label && item.value);
+  }
+
+  return [
+    profile.email ? { label: "Email", value: profile.email } : null,
+    profile.wechat ? { label: "WeChat", value: profile.wechat } : null,
+    profile.phone ? { label: "Phone", value: profile.phone } : null,
+  ].filter(Boolean);
+}
+
 function renderProfile() {
-  document.title = `${profile.name || "Portfolio"} | 个人作品集`;
+  document.title = `${profile.name || "Portfolio"} | 机器人作品集`;
   nodes.initials.textContent = getInitials(profile.name);
   nodes.footerName.textContent = profile.name || "Portfolio";
 
@@ -135,18 +156,20 @@ function renderProfile() {
     node.textContent = profile[key] || node.textContent;
   });
 
+  nodes.projectCount.textContent = projects.length;
+  nodes.mediaCount.textContent = projects.reduce((total, project) => total + (project.media?.length || 0), 0);
+
   nodes.heroLinks.innerHTML = "";
-  contactItems()
-    .forEach((contact) => {
-      const item = document.createElement("span");
-      item.className = "contact-chip";
-      const label = document.createElement("small");
-      const value = document.createElement("strong");
-      label.textContent = contact.label;
-      value.textContent = contact.value;
-      item.append(label, value);
-      nodes.heroLinks.append(item);
-    });
+  contactItems().forEach((contact) => {
+    const item = document.createElement("span");
+    item.className = "contact-chip";
+    const label = document.createElement("small");
+    const value = document.createElement("strong");
+    label.textContent = contact.label;
+    value.textContent = contact.value;
+    item.append(label, value);
+    nodes.heroLinks.append(item);
+  });
 
   nodes.skillList.innerHTML = "";
   (profile.skills || []).forEach((skill) => {
@@ -168,18 +191,6 @@ function renderProfile() {
   });
 }
 
-function contactItems() {
-  if (Array.isArray(profile.contacts) && profile.contacts.length) {
-    return profile.contacts.filter((item) => item.label && item.value);
-  }
-
-  return [
-    profile.email ? { label: "Email", value: profile.email } : null,
-    profile.wechat ? { label: "WeChat", value: profile.wechat } : null,
-    profile.phone ? { label: "Phone", value: profile.phone } : null,
-  ].filter(Boolean);
-}
-
 function renderFeatured() {
   const featured = projects.find((project) => project.featured) || projects[0];
   const media = firstMedia(featured);
@@ -193,6 +204,7 @@ function renderFeatured() {
   nodes.featuredMedia.append(createMedia(media));
   nodes.featuredCategory.textContent = featured.category || "Featured Project";
   nodes.featuredTitle.textContent = featured.title || media.title || "Selected Project";
+  nodes.featuredResult.textContent = featured.result || "";
 }
 
 function categories() {
@@ -239,6 +251,12 @@ function renderHighlights(container, highlights = []) {
   });
 }
 
+function variantLabel(variant) {
+  if (variant === "without") return "Without SDF";
+  if (variant === "with") return "With SDF";
+  return "";
+}
+
 function renderProjectMedia(container, project) {
   container.innerHTML = "";
 
@@ -253,12 +271,23 @@ function renderProjectMedia(container, project) {
   project.media.forEach((media) => {
     const item = document.createElement("button");
     item.className = "project-media-item";
+    if (media.variant) item.classList.add(`variant-${media.variant}`);
     item.type = "button";
     item.append(createMedia(media));
 
     const caption = document.createElement("span");
+    caption.className = "media-caption";
     caption.textContent = media.title || "项目媒体";
     item.append(caption);
+
+    const label = variantLabel(media.variant);
+    if (label) {
+      const badge = document.createElement("em");
+      badge.className = "variant-badge";
+      badge.textContent = label;
+      item.append(badge);
+    }
+
     item.addEventListener("click", () => openDialog(project, media));
     container.append(item);
   });
@@ -267,23 +296,28 @@ function renderProjectMedia(container, project) {
 function renderProjects() {
   const list = visibleProjects();
   nodes.projectList.innerHTML = "";
-  nodes.emptyState.hidden = projects.length > 0;
+  nodes.emptyState.hidden = list.length > 0;
 
   list.forEach((project, index) => {
     const card = nodes.template.content.firstElementChild.cloneNode(true);
+    const number = card.querySelector(".project-number");
     const category = card.querySelector(".category");
     const year = card.querySelector(".year");
     const title = card.querySelector("h3");
-    const summary = card.querySelector("p");
+    const summary = card.querySelector(".project-summary");
+    const result = card.querySelector(".result-line");
     const highlights = card.querySelector(".highlight-list");
     const tags = card.querySelector(".tag-row");
     const mediaList = card.querySelector(".project-media-list");
 
     card.id = project.id || `project-${index + 1}`;
+    number.textContent = String(projects.indexOf(project) + 1).padStart(2, "0");
     category.textContent = project.category || "Project";
     year.textContent = project.year || "";
     title.textContent = project.title || "Untitled";
     summary.textContent = project.summary || "";
+    result.textContent = project.result || "";
+    result.hidden = !project.result;
     renderHighlights(highlights, project.highlights || []);
     renderTags(tags, project.tags || []);
     renderProjectMedia(mediaList, project);
