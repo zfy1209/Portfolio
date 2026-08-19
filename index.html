@@ -41,8 +41,8 @@
             </div>
           </div>
           <div class="featured-caption">
-            <span id="featuredCategory">Featured</span>
-            <strong id="featuredTitle">作品素材待添加</strong>
+            <span id="featuredCategory">Featured Project</span>
+            <strong id="featuredTitle">项目素材待添加</strong>
           </div>
         </aside>
       </section>
@@ -50,14 +50,14 @@
       <section class="section" id="works">
         <div class="section-heading">
           <div>
-            <p class="kicker">Selected Works</p>
-            <h2>作品案例</h2>
+            <p class="kicker">Project Portfolio</p>
+            <h2>项目经历</h2>
           </div>
-          <div class="filters" id="filters" aria-label="作品分类"></div>
+          <div class="filters" id="filters" aria-label="项目分类"></div>
         </div>
-        <div class="work-grid" id="workGrid"></div>
+        <div class="project-list" id="projectList"></div>
         <div class="empty-state" id="emptyState">
-          <strong>作品正在整理中</strong>
+          <strong>项目正在整理中</strong>
           <p>代表项目、图片和视频会显示在这里。</p>
         </div>
       </section>
@@ -84,7 +84,7 @@
       </section>
     </main>
 
-    <dialog class="media-dialog" id="mediaDialog" aria-label="作品预览">
+    <dialog class="media-dialog" id="mediaDialog" aria-label="媒体预览">
       <button class="dialog-close" type="button" id="dialogClose" aria-label="关闭预览">×</button>
       <div id="dialogMedia"></div>
       <div class="dialog-copy">
@@ -95,21 +95,19 @@
       </div>
     </dialog>
 
-    <template id="workTemplate">
-      <article class="work-card">
-        <button class="work-media" type="button" aria-label="预览作品"></button>
-        <div class="work-copy">
+    <template id="projectTemplate">
+      <article class="project-card">
+        <div class="project-copy">
           <div class="card-line">
             <span class="category"></span>
             <span class="year"></span>
           </div>
           <h3></h3>
           <p></p>
+          <ul class="highlight-list"></ul>
           <div class="tag-row"></div>
-          <div class="card-actions">
-            <a target="_blank" rel="noreferrer">查看链接</a>
-          </div>
         </div>
+        <div class="project-media-list"></div>
       </article>
     </template>
 

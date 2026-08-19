@@ -1,6 +1,6 @@
 const data = window.PORTFOLIO_DATA || {};
 const profile = data.profile || {};
-const works = Array.isArray(data.works) ? data.works : [];
+const projects = Array.isArray(data.projects) ? data.projects : Array.isArray(data.works) ? data.works : [];
 
 const nodes = {
   initials: document.querySelector("[data-initials]"),
@@ -10,12 +10,12 @@ const nodes = {
   featuredCategory: document.querySelector("#featuredCategory"),
   featuredTitle: document.querySelector("#featuredTitle"),
   filters: document.querySelector("#filters"),
-  workGrid: document.querySelector("#workGrid"),
+  projectList: document.querySelector("#projectList"),
   emptyState: document.querySelector("#emptyState"),
   skillList: document.querySelector("#skillList"),
   contactLinks: document.querySelector("#contactLinks"),
   footerName: document.querySelector("[data-footer-name]"),
-  template: document.querySelector("#workTemplate"),
+  template: document.querySelector("#projectTemplate"),
   dialog: document.querySelector("#mediaDialog"),
   dialogClose: document.querySelector("#dialogClose"),
   dialogMedia: document.querySelector("#dialogMedia"),
@@ -30,8 +30,13 @@ let activeCategory = "全部";
 function getInitials(name = "") {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (!parts.length) return "PF";
+  if (/[\u4e00-\u9fa5]/.test(name)) return name.trim().slice(-2);
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+}
+
+function firstMedia(project) {
+  return project?.media?.[0];
 }
 
 function createPlaceholder(label = "Portfolio") {
@@ -43,26 +48,26 @@ function createPlaceholder(label = "Portfolio") {
   return placeholder;
 }
 
-function createMedia(work, controls = false) {
-  if (!work.media) {
-    return createPlaceholder(work.category || "Work");
+function createMedia(media, controls = false) {
+  if (!media?.src) {
+    return createPlaceholder(media?.title || "Media");
   }
 
-  if (work.mediaType === "video") {
+  if (media.type === "video") {
     const video = document.createElement("video");
-    video.src = work.media;
-    video.poster = work.poster || "";
+    video.src = media.src;
+    video.poster = media.poster || "";
     video.controls = controls;
     video.muted = !controls;
     video.playsInline = true;
-    video.preload = controls ? "metadata" : "none";
+    video.preload = controls ? "metadata" : "metadata";
     video.addEventListener("error", () => video.replaceWith(createPlaceholder("Video")));
     return video;
   }
 
   const image = document.createElement("img");
-  image.src = work.media;
-  image.alt = work.title || "作品图片";
+  image.src = media.src;
+  image.alt = media.title || "项目图片";
   image.loading = "lazy";
   image.addEventListener("error", () => image.replaceWith(createPlaceholder("Image")));
   return image;
@@ -70,7 +75,7 @@ function createMedia(work, controls = false) {
 
 function renderTags(container, tags = []) {
   container.innerHTML = "";
-  tags.slice(0, 8).forEach((tag) => {
+  tags.slice(0, 10).forEach((tag) => {
     const item = document.createElement("span");
     item.textContent = tag;
     container.append(item);
@@ -127,21 +132,22 @@ function renderProfile() {
 }
 
 function renderFeatured() {
-  const featured = works.find((work) => work.featured) || works[0];
+  const featured = projects.find((project) => project.featured) || projects[0];
+  const media = firstMedia(featured);
   nodes.featuredMedia.innerHTML = "";
 
-  if (!featured) {
+  if (!featured || !media) {
     nodes.featuredMedia.append(createPlaceholder("Portfolio"));
     return;
   }
 
-  nodes.featuredMedia.append(createMedia(featured));
-  nodes.featuredCategory.textContent = featured.category || "Featured";
-  nodes.featuredTitle.textContent = featured.title || "Selected Work";
+  nodes.featuredMedia.append(createMedia(media));
+  nodes.featuredCategory.textContent = featured.category || "Featured Project";
+  nodes.featuredTitle.textContent = featured.title || media.title || "Selected Project";
 }
 
 function categories() {
-  return ["全部", ...new Set(works.map((work) => work.category).filter(Boolean))];
+  return ["全部", ...new Set(projects.map((project) => project.category).filter(Boolean))];
 }
 
 function renderFilters() {
@@ -154,57 +160,85 @@ function renderFilters() {
     button.addEventListener("click", () => {
       activeCategory = category;
       renderFilters();
-      renderWorks();
+      renderProjects();
     });
     nodes.filters.append(button);
   });
 }
 
-function visibleWorks() {
-  if (activeCategory === "全部") return works;
-  return works.filter((work) => work.category === activeCategory);
+function visibleProjects() {
+  if (activeCategory === "全部") return projects;
+  return projects.filter((project) => project.category === activeCategory);
 }
 
-function openDialog(work) {
+function openDialog(project, media) {
   nodes.dialogMedia.innerHTML = "";
-  nodes.dialogMedia.append(createMedia(work, true));
-  nodes.dialogCategory.textContent = work.category || "Work";
-  nodes.dialogTitle.textContent = work.title || "Untitled";
-  nodes.dialogSummary.textContent = work.summary || "";
-  renderTags(nodes.dialogTags, work.tags || []);
+  nodes.dialogMedia.append(createMedia(media, true));
+  nodes.dialogCategory.textContent = project.category || "Project";
+  nodes.dialogTitle.textContent = media.title || project.title || "Untitled";
+  nodes.dialogSummary.textContent = media.description || project.summary || "";
+  renderTags(nodes.dialogTags, project.tags || []);
   nodes.dialog.showModal();
 }
 
-function renderWorks() {
-  const list = visibleWorks();
-  nodes.workGrid.innerHTML = "";
-  nodes.emptyState.hidden = works.length > 0;
+function renderHighlights(container, highlights = []) {
+  container.innerHTML = "";
+  highlights.forEach((highlight) => {
+    const item = document.createElement("li");
+    item.textContent = highlight;
+    container.append(item);
+  });
+}
 
-  list.forEach((work) => {
+function renderProjectMedia(container, project) {
+  container.innerHTML = "";
+
+  if (!project.media?.length) {
+    const empty = document.createElement("div");
+    empty.className = "media-empty";
+    empty.textContent = "该项目的图片/视频素材可继续补充。";
+    container.append(empty);
+    return;
+  }
+
+  project.media.forEach((media) => {
+    const item = document.createElement("button");
+    item.className = "project-media-item";
+    item.type = "button";
+    item.append(createMedia(media));
+
+    const caption = document.createElement("span");
+    caption.textContent = media.title || "项目媒体";
+    item.append(caption);
+    item.addEventListener("click", () => openDialog(project, media));
+    container.append(item);
+  });
+}
+
+function renderProjects() {
+  const list = visibleProjects();
+  nodes.projectList.innerHTML = "";
+  nodes.emptyState.hidden = projects.length > 0;
+
+  list.forEach((project, index) => {
     const card = nodes.template.content.firstElementChild.cloneNode(true);
-    const mediaButton = card.querySelector(".work-media");
     const category = card.querySelector(".category");
     const year = card.querySelector(".year");
     const title = card.querySelector("h3");
     const summary = card.querySelector("p");
+    const highlights = card.querySelector(".highlight-list");
     const tags = card.querySelector(".tag-row");
-    const action = card.querySelector(".card-actions a");
+    const mediaList = card.querySelector(".project-media-list");
 
-    mediaButton.append(createMedia(work));
-    mediaButton.addEventListener("click", () => openDialog(work));
-    category.textContent = work.category || "Work";
-    year.textContent = work.year || "";
-    title.textContent = work.title || "Untitled";
-    summary.textContent = work.summary || "";
-    renderTags(tags, work.tags || []);
-
-    if (work.link) {
-      action.href = work.link;
-    } else {
-      action.hidden = true;
-    }
-
-    nodes.workGrid.append(card);
+    card.id = project.id || `project-${index + 1}`;
+    category.textContent = project.category || "Project";
+    year.textContent = project.year || "";
+    title.textContent = project.title || "Untitled";
+    summary.textContent = project.summary || "";
+    renderHighlights(highlights, project.highlights || []);
+    renderTags(tags, project.tags || []);
+    renderProjectMedia(mediaList, project);
+    nodes.projectList.append(card);
   });
 }
 
@@ -220,5 +254,5 @@ function bindDialog() {
 renderProfile();
 renderFeatured();
 renderFilters();
-renderWorks();
+renderProjects();
 bindDialog();
