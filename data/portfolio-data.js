@@ -102,7 +102,22 @@ window.PORTFOLIO_DATA = {
         "相关论文工作：A Unified SDF-Based Framework for Obstacle Avoidance in Dual-Arm Cooperative Manipulation，ICUS 2026，已录用。",
       ],
       tags: ["Dual-Arm", "Reactive Planning", "Task Priority", "SDF", "Null Space", "ICUS 2026"],
-      media: [],
+      media: [
+        {
+          title: "未引入 SDF 全身避障任务",
+          type: "video",
+          src: "assets/works_web/项目二-无sdf.mp4",
+          description:
+            "对照实验：仅依靠原有反应式规划与任务优先级控制执行双臂协同搬运，未引入 SDF 全身距离感知与梯度避障任务，用于观察受限空间中局部碰撞风险和安全裕度不足的问题。",
+        },
+        {
+          title: "引入 SDF 全身距离感知与梯度避障任务",
+          type: "video",
+          src: "assets/works_web/项目二-有sdf.mp4",
+          description:
+            "改进实验：在任务优先级控制框架中加入 SDF 全身距离感知与梯度避障任务，通过零空间投影协调协作搬运与全身避障，提高复杂障碍场景下的最小安全距离和执行稳定性。",
+        },
+      ],
     },
     {
       id: "vr-teleoperation-data-system",
